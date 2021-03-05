@@ -1,0 +1,11 @@
+<%= if @changeset.action do %>
+  <div class="alert alert-danger">
+    Edit failed. Please fix the errors below.
+  </div>
+<% end %>
+
+<span><%= link "< Back", to: Routes.event_path(@conn, :index) %></span>
+
+<h1>Edit User</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.user_path(@conn, :update, @user)) %>

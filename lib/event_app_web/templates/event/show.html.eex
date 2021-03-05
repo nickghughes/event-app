@@ -1,0 +1,27 @@
+<span><%= link "< Back", to: Routes.event_path(@conn, :index) %></span>
+
+<div class="row">
+  <div class="col-6 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-subtitle text-right">
+          <b>Created by:</b> <%= @event.user.name %>
+        </div>
+        <div class="card-title text-center my-2">
+          <h1><%= @event.title %></h1>
+        </div>
+        <div class="card-title text-center my-2">
+          <h3><%= EventApp.Events.Event.date_display(@event) %></h3>
+        </div>
+        <div class="card-text text-center my-2">
+          <small><%= @event.description %></small>
+        </div>
+        <%= if @conn.assigns[:current_user] do %>
+          <div class="col-6 text-center my-3 mx-auto">
+            <%= link "Edit", to: Routes.event_path(@conn, :edit, @event), class: "btn btn-block btn-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

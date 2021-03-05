@@ -1,0 +1,36 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <div class="form-group my-4">
+    <%= text_input f, :title, class: "form-control", placeholder: "Event Title" %>
+    <%= error_tag f, :title %>
+  </div>
+
+  <div class="form-group">
+    <%= textarea f, :description, class: "form-control", placeholder: "Description" %>
+    <%= error_tag f, :description %>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class="col-lg-1">
+        <b><%= label f, :date %></b>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <%= text_input f, :date, id: "datetimepicker", class: "input-group date" %>
+      </div>
+    </div>
+    <%= error_tag f, :date %>
+  </div>
+
+  <div>
+    <%= submit "Save", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  (function() {
+    $('#datetimepicker').flatpickr({
+      enableTime: true,
+      dateFormat: "Y-m-d H:i",
+    });
+  })();
+</script>

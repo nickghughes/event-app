@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col">
+    <h1>Events</h1>
+  </div>
+  <%= if @conn.assigns[:current_user] do %>
+    <div class="col text-right">
+      <%= link "New Event", to: Routes.event_path(@conn, :new), class: "btn btn-primary" %>
+    </div>
+    <% end %>
+</div>
+
+<div class="row">
+  <%= for event <- @events do %>
+      <div class="col-xl-3 my-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-subtitle text-right">
+              <small><b>Created by:</b> <%= event.user.name %></small>
+            </div>
+            <div class="card-title text-center my-2">
+              <h5><%= event.title %></h5>
+            </div>
+            <div class="card-title text-center my-2">
+              <h6><%= EventApp.Events.Event.date_display(event) %></h6>
+            </div>
+            <div class="card-text text-center my-2">
+              <small><%= event.description %></small>
+            </div>
+            <div class="row">
+            <%= if @conn.assigns[:current_user] do %>
+              <div class="col-7 text-center mx-auto">
+                <%= link "View", to: Routes.event_path(@conn, :show, event), class: "btn btn-block btn-info" %>
+              </div>
+              <%# Uncomment this when we want to secure editing %>
+              <%# <%= if @conn.assigns[:current_user].id == event.user.id do %>
+              <div class="col-5 text-center">
+                <%= link "Edit", to: Routes.event_path(@conn, :edit, event), class: "btn btn-block btn-secondary" %>
+              </div>
+              <%# <% end %>
+            <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+  <% end %>
+</div>
