@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# export SECRET_KEY_BASE=W68eso5YQOlbtvSNUR50N/HDWj6IaEhAwMR3LtzuBEQAefwYVbX84bvoTA7XtiGi
 export MIX_ENV=prod
 export PORT=4444
 export NODEBIN=`pwd`/assets/node_modules/.bin
@@ -13,6 +12,8 @@ mix compile
 (cd assets && npm install)
 (cd assets && webpack --mode production)
 mix phx.digest
+
+mix ecto.migrate
 
 echo "Generating release..."
 mix release
