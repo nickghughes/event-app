@@ -4,11 +4,19 @@ defmodule EventAppWeb.SessionController do
 
   def create(conn, %{"email" => email}) do
     user = EventApp.Users.get_user_by_email(email)
+
     if user do
+      redirect_to = case conn.params["return_to"] do
+        path when path in [nil, ""] ->
+          Routes.event_path(conn, :index)
+        path ->
+          path
+      end
+
       conn
       |> put_session(:user_id, user.id)
       |> put_flash(:info, "Welcome back, #{user.name}!")
-      |> redirect(to: Routes.event_path(conn, :index))
+      |> redirect(to: redirect_to)
     else
       conn
       |> put_flash(:error, "Login failed.")

@@ -1,5 +1,13 @@
 <h1>Show User</h1>
 
+<span><%= link "< Back", to: Routes.event_path(@conn, :index) %></span>
+
+<div class="row">
+  <%= if @user.profile_photo_hash do %>
+    <img src=<%= Routes.user_path(@conn, :profile_photo, @user) %> alt="" class="img-circle">
+  <% end %>
+</div>
+
 <ul>
 
   <li>
@@ -14,5 +22,4 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user) %></span>
-<span><%= link "Back", to: Routes.user_path(@conn, :index) %></span>
+<span><%= link "Edit Profile", to: Routes.user_path(@conn, :edit, @user) %></span>

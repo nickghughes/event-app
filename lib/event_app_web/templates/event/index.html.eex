@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col">
-    <h1>Events</h1>
+    <h1>My Events</h1>
   </div>
-  <%= if @conn.assigns[:current_user] do %>
+  <%= if logged_in?(@conn) do %>
     <div class="col text-right">
       <%= link "New Event", to: Routes.event_path(@conn, :new), class: "btn btn-primary" %>
     </div>
@@ -10,37 +10,40 @@
 </div>
 
 <div class="row">
-  <%= for event <- @events do %>
-      <div class="col-xl-3 my-2">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-subtitle text-right">
-              <small><b>Created by:</b> <%= event.user.name %></small>
-            </div>
-            <div class="card-title text-center my-2">
-              <h5><%= event.title %></h5>
-            </div>
-            <div class="card-title text-center my-2">
-              <h6><%= EventApp.Events.Event.date_display(event) %></h6>
-            </div>
-            <div class="card-text text-center my-2">
-              <small><%= event.description %></small>
-            </div>
-            <div class="row">
-            <%= if @conn.assigns[:current_user] do %>
-              <div class="col-7 text-center mx-auto">
-                <%= link "View", to: Routes.event_path(@conn, :show, event), class: "btn btn-block btn-info" %>
+  <%= if logged_in?(@conn) do %>
+    <%= for event <- @events do %>
+        <div class="col-xl-3 my-2">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-subtitle text-right">
+                <small><b>Created by:</b> <%= event.user.name %></small>
               </div>
-              <%# Uncomment this when we want to secure editing %>
-              <%# <%= if @conn.assigns[:current_user].id == event.user.id do %>
-              <div class="col-5 text-center">
-                <%= link "Edit", to: Routes.event_path(@conn, :edit, event), class: "btn btn-block btn-secondary" %>
+              <div class="card-title text-center my-2">
+                <h5><%= event.title %></h5>
               </div>
-              <%# <% end %>
-            <% end %>
+              <div class="card-title text-center my-2">
+                <h6><%= EventApp.Events.Event.date_display(event) %></h6>
+              </div>
+              <div class="card-text text-center my-2">
+                <small><%= event.description %></small>
+              </div>
+              <div class="row">
+                <div class="col-7 text-center mx-auto">
+                  <%= link "View", to: Routes.event_path(@conn, :show, event), class: "btn btn-block btn-info" %>
+                </div>
+                <%= if @conn.assigns[:current_user].id == event.user.id do %>
+                  <div class="col-5 text-center">
+                    <%= link "Edit", to: Routes.event_path(@conn, :edit, event), class: "btn btn-block btn-secondary" %>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+    <% end %>
+  <% else %>
+    <div class="col mx-auto text-center">
+      <h5>Please log in above or <%= link "register", to: Routes.user_path(@conn, :new) %> to view events.</h5>
+    </div>
   <% end %>
 </div>

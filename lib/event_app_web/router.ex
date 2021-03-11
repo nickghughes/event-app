@@ -18,13 +18,18 @@ defmodule EventAppWeb.Router do
     pipe_through :browser
 
     get "/", EventController, :index
-    resources "/events", EventController
+    resources "/events", EventController do
+      resources "/comments", CommentController, only: [:create, :delete]
+      resources "/invites", InviteController, only: [:create, :update]
+    end
 
     get "/register", UserController, :new
-    resources "/users", UserController
+    resources "/users", UserController, only: [:new, :create, :show, :edit, :update]
 
     resources "/sessions", SessionController, 
       only: [:create, :delete], singleton: true
+
+    get "/users/profile_photo/:id", UserController, :profile_photo
   end
 
   # Other scopes may use custom stacks.

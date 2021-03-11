@@ -104,7 +104,13 @@ defmodule EventApp.Users do
 
   def get_user(id), do: Repo.get(User, id)
 
+  # Get a user by email
   def get_user_by_email(email) do
     Repo.get_by(User, email: email)
+  end
+
+  # Get multiple users with a list of emails
+  def get_users_by_emails(emails) do
+    Repo.all from u in User, where: u.email in ^emails
   end
 end

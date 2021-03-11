@@ -1,0 +1,18 @@
+<%= form_for @changeset, Routes.event_comment_path(@conn, :create, @event), fn f -> %>
+  <div class="row mx-2">
+    <div class="col-1 px-0">
+      <%= if @conn.assigns[:current_user].profile_photo_hash do %>
+        <img src=<%= Routes.user_path(@conn, :profile_photo, @conn.assigns[:current_user]) %> alt="" class="img-circle">
+      <% end %>
+    </div>
+    <div class="col-11">
+      <%= textarea f, :body, class: "form-control", placeholder: "Enter comment here..." %>
+      <%= error_tag f, :body %>
+    </div>
+  </div>
+  <div class="row mt-2 mx-2 text-right">
+    <div class="col mx-2">
+      <%= submit "Save Comment", class: "btn btn-sm btn-primary" %>
+    </div>
+  </div>
+<% end %>

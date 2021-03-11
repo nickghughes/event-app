@@ -1,0 +1,10 @@
+<%= form_for @changeset, Routes.event_invite_path(@conn, :create, @event), fn f -> %>
+  <%= label f, "Invite people:" %>
+  <div class="input-group">
+    <%= text_input f, :email, class: "form-control", placeholder: "Email" %>
+    <span class="input-group-btn">
+    <%= submit "Save", class: "btn btn-info" %>
+    </span>
+  </div>
+  <%= error_tag f, :email %>
+<% end %>
