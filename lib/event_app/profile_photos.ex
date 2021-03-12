@@ -41,9 +41,14 @@ defmodule EventApp.ProfilePhotos do
 
   def base_path(hash) do
     Path.expand("~/.local/data/event_app")
-    |> Path.join("#{Mix.env}")
+    |> Path.join("#{env_name}")
     |> Path.join(String.slice(hash, 0, 2))
     |> Path.join(String.slice(hash, 2, 30))
+  end
+
+  def env_name do
+    sys_env = System.get_env("MIX_ENV")
+    if sys_env, do: sys_env, else: Mix.env
   end
 
   def data_path(hash) do
