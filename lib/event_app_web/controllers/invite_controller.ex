@@ -8,6 +8,7 @@ defmodule EventAppWeb.InviteController do
   plug :require_event_owner when action in [:create]
   plug :require_invitee when action in [:update]
 
+  # Only allow event owners to send invites
   def require_event_owner(conn, _args) do
     event = Events.get_event! conn.params["event_id"]
     if logged_in?(conn) and conn.assigns[:current_user].id == event.user_id do
@@ -19,6 +20,7 @@ defmodule EventAppWeb.InviteController do
     end
   end
 
+  # Only allow invitees to edit their own invitation responses
   def require_invitee(conn, _args) do
     event = Events.get_event! conn.params["event_id"]
     if logged_in?(conn) and conn.assigns[:current_user].email in Enum.map(event.invites, fn x -> x.email end) do

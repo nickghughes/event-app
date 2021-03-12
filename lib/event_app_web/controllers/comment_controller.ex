@@ -10,11 +10,13 @@ defmodule EventAppWeb.CommentController do
   plug :require_event_owner_or_invitee when action in [:create]
   plug :require_comment_owner when action in [:delete]
   
+  # Assign the current comment to the connection
   def fetch_comment(conn, _args) do
     comment = Comments.get_comment! conn.params["id"]
     assign conn, :comment, comment
   end
 
+  # Redirect back to events index if user isn't the owner or an invitee
   def require_event_owner_or_invitee(conn, _args) do
     event = Events.get_event! conn.params["event_id"]
     if logged_in?(conn) and (conn.assigns[:current_user].id == event.user_id or conn.assigns[:current_user].email in Enum.map(event.invites, fn x -> x.email end)) do
@@ -26,6 +28,7 @@ defmodule EventAppWeb.CommentController do
     end
   end
 
+  # Redirect user back to events index if user tries to delete a comment that isn't theirs
   def require_comment_owner(conn, _args) do
     if owner?(conn) do
       conn

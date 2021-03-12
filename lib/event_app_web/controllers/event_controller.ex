@@ -13,11 +13,13 @@ defmodule EventAppWeb.EventController do
   plug :require_owner when action in [:edit, :update, :delete]
   plug :require_owner_or_invited when action in [:show]
 
+  # Assign the current event to the connection
   def fetch_event(conn, _args) do
     event = Events.get_event! conn.params["id"]
     assign conn, :event, event
   end
-
+  
+  # Do not allow any event-specific requests to non-logged in users
   def require_login(conn, _args) do
     if logged_in?(conn) do
       conn
@@ -28,6 +30,7 @@ defmodule EventAppWeb.EventController do
     end
   end
 
+  # Only the owner can edit events
   def require_owner(conn, _args) do
     if owner?(conn) do
       conn
@@ -38,6 +41,7 @@ defmodule EventAppWeb.EventController do
     end
   end
 
+  # Only the owner or invitees can view the event
   def require_owner_or_invited(conn, _args) do
     if owner?(conn) or invited?(conn) do
       conn

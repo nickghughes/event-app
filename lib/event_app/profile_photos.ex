@@ -46,6 +46,7 @@ defmodule EventApp.ProfilePhotos do
     |> Path.join(String.slice(hash, 2, 30))
   end
 
+  # Mix is not available in prod
   def env_name do
     sys_env = System.get_env("MIX_ENV")
     if sys_env, do: sys_env, else: Mix.env

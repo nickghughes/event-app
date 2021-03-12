@@ -8,11 +8,13 @@ defmodule EventAppWeb.UserController do
   plug :fetch_user when action in [:show, :edit, :update, :profile_photo]
   plug :require_logged_in_as when action in [:show, :edit, :update]
 
+  # Assign the current user to the connection (the user being accessed, not the logged in user)
   def fetch_user(conn, _args) do
     user = Users.get_user! conn.params["id"]
     assign conn, :user, user
   end
 
+  # Only allow users to see/edit their own information
   def require_logged_in_as(conn, _args) do
     if logged_in?(conn) and conn.assigns[:current_user].id == conn.assigns[:user].id do
       conn
