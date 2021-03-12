@@ -44,7 +44,7 @@
       <%= if length(@event.invites) > 0 do %>
         <div class="my-3">
           <p>Invitees can respond through this link:</p>
-          <b> <%= "http://#{@conn.host}#{Routes.event_path(@conn, :show, @event)}" %> </b>
+          <b> <%= "#{EventAppWeb.Endpoint.url()}#{Routes.event_path(@conn, :show, @event)}" %> </b>
         </div>
       <% end %>
 
