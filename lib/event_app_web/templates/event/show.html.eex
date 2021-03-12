@@ -1,7 +1,8 @@
 <span><%= link "< Back", to: Routes.event_path(@conn, :index) %></span>
 
 <div class="row">
-  <div class="col-6 mx-auto">
+  <div class="col-lg-1"></div>
+  <div class="col-lg-7">
     <div class="card">
       <div class="card-body">
         <div class="card-subtitle text-right">
@@ -16,12 +17,65 @@
         <div class="card-text text-center my-2">
           <small><%= @event.description %></small>
         </div>
-        <%= if @conn.assigns[:current_user] do %>
-          <div class="col-6 text-center my-3 mx-auto">
+        <%= if @owner do %>
+          <div class="col-6 text-right my-3 mx-auto">
             <%= link "Edit", to: Routes.event_path(@conn, :edit, @event), class: "btn btn-block btn-secondary" %>
           </div>
         <% end %>
+        <%= for comment <- @event.comments do %>
+          <%= render EventAppWeb.CommentView, "show.html", conn: @conn, event: @event, comment: comment %>
+        <% end %>
+        
+        <%= render EventAppWeb.CommentView, "new.html", conn: @conn, event: @event, changeset: @comment_changeset %>
       </div>
     </div>
+  </div>
+  <div class="col-lg-4 text-center">
+    <%= if @invited do %>
+      <h4> Going? </h4>
+      <%= render EventAppWeb.InviteView, "edit.html", conn: @conn, invite: @invite, event: @event, changeset: @invite_changeset %>
+    <% end %>
+
+    <%= if @owner do %>
+      <div class="my-3">
+        <%= render EventAppWeb.InviteView, "new.html", conn: @conn, event: @event, changeset: @invite_changeset %>
+      </div>
+
+      <%= if length(@event.invites) > 0 do %>
+        <div class="my-3">
+          <p>Invitees can respond through this link:</p>
+          <b> <%= "http://#{@conn.host}#{Routes.event_path(@conn, :show, @event)}" %> </b>
+        </div>
+      <% end %>
+
+    <% end %>
+    
+    <h4> Who's Going? </h4>
+    <h5><%= Enum.join(Enum.map(Ecto.Enum.values(EventApp.Invites.Invite, :response) ++ [nil], fn x -> "#{length(@invites[x])} #{if x, do: Atom.to_string(x), else: "no response"}" end), ", ") %></h5>
+    
+    <%= if @owner do %>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <%= for response <- Ecto.Enum.values(EventApp.Invites.Invite, :response) ++ [nil] do %>
+              <th>
+                <%= if response, do: Atom.to_string(response), else: "TBD" %>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for i <- 0..(Enum.max(Enum.map(Map.to_list(@invites), fn {_, y} -> length(y) end)) - 1) do %>
+            <tr>
+              <%= for response <- Ecto.Enum.values(EventApp.Invites.Invite, :response) ++ [nil] do %>
+                <td>
+                  <%= if length(@invites[response]) >= i + 1, do: Enum.at(@invites[response], i), else: "" %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
   </div>
 </div>

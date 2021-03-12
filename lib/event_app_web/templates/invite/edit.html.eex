@@ -1,0 +1,11 @@
+<%= form_for @changeset, Routes.event_invite_path(@conn, :update, @event, @invite), fn f -> %>
+  <div class="input-group text-center">
+    <%= for response <- Ecto.Enum.values(EventApp.Invites.Invite, :response) do %>
+      <div class="form-check col-xl-4">
+        <%= radio_button f, :response, response %>
+        <%= label f, String.to_atom("response_#{Atom.to_string(response)}"), response %>
+      </div>
+    <% end %>
+  </div>
+  <%= submit "Save", class: "btn btn-sm btn-info" %>
+<% end %>

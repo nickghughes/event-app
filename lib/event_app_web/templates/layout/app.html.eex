@@ -19,12 +19,13 @@
       <%= if @conn.assigns[:current_user] do %>
           <div class="col-7 my-2 text-right">
             Logged in as: <%= @current_user.name %> |
+            <%= link("Profile", to: Routes.user_path(@conn, :show, @current_user)) %> | 
             <%= link("Logout", to: Routes.session_path(@conn, :delete),
               method: :delete) %>
           </div>
         <% else %>
           <div class="col-5 my-2">
-            <%= form_for @conn, Routes.session_path(@conn, :create),
+            <%= form_for @conn, Routes.session_path(@conn, :create, return_to: @conn.params["return_to"]),
              fn f -> %>
               <div class="input-group">
                 <%= text_input f, :email, class: "form-control", placeholder: "Email" %>

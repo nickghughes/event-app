@@ -1,6 +1,11 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, @action, [multipart: true], fn f -> %>
   <div class="row">
     <div class="col-6">
+      <div class="form-group">
+        <%= label f, :profile_photo %>
+        <%= file_input f, :profile_photo %>
+        <%= error_tag f, :profile_photo %>
+      </div>
       <div class="form-group">
         <%= text_input f, :name, class: "form-control", placeholder: "Name" %>
         <%= error_tag f, :name %>

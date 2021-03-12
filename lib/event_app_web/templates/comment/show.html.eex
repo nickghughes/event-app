@@ -1,0 +1,28 @@
+<div class="row mx-2 my-3">
+  <div class="col-1 px-0">
+    <%= if @comment.user.profile_photo_hash do %>
+      <img src=<%= Routes.user_path(@conn, :profile_photo, @comment.user) %> alt="" class="img-circle">
+    <% end %>
+  </div>
+  <div class="col-11 card">
+    <div class="card-header row my-0 py-0">
+      <div class="col text-left">
+        <b><%= @comment.user.name %></b>
+      </div>
+      <div class="col text-right">
+        <%= EventApp.Comments.Comment.date_display(@comment) %>
+      </div>
+    </div>
+    <div class="card-body row">
+      <div class="col">
+        <%= @comment.body %>
+      </div>
+    </div>
+    <%= if @comment.user_id == @conn.assigns[:current_user].id do %>
+      <div class="card-link text-right mb-2 mr-1">
+        <small><%= link "Delete", to: Routes.event_comment_path(@conn, :delete, @event, @comment), method: :delete, class: "text-danger" %></small>
+      </div>
+    <% end %>
+  </div>
+</div>
+
